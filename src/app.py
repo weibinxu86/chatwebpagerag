@@ -58,11 +58,11 @@ def display_chat():
     current_chat_history = st.session_state.chat_histories.get(st.session_state.current_url, [])
     for message in current_chat_history:
         if isinstance(message, AIMessage):
-            st.markdown(f"<p style='color:gray;'>{message.content}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='color:gray; background-color:#F0F0F0; padding:10px; border-radius:10px;'>{message.content}</p>", unsafe_allow_html=True)
         elif isinstance(message, HumanMessage):
-            st.write(message.content)
+            st.markdown(f"<p style='color:black; background-color:#D9EDF7; padding:10px; border-radius:10px;'>{message.content}</p>", unsafe_allow_html=True)
 
-st.set_page_config(page_title="Chat with websites", page_icon="🤖")
+st.set_page_config(page_title="Chat with websites", page_icon="🤖", layout='wide')
 st.title("Chat with websites")
 
 with st.sidebar:
@@ -75,7 +75,7 @@ with st.sidebar:
         if website_url not in st.session_state.chat_histories:
             st.session_state.chat_histories[website_url] = [AIMessage(content="Hello, I am a bot. How can I help you based on the new website?")]
 
-user_query = st.text_input("Type your message here...", key="user_input")
+user_query = st.text_input("Type your message here...", key="user_input", on_change=display_chat)
 if user_query:
     response = get_response(user_query, st.session_state.current_url)
     st.session_state.chat_histories[st.session_state.current_url].append(HumanMessage(content=user_query))
