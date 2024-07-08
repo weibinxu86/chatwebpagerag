@@ -11,7 +11,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
-openaimodel="gpt-40"
+openaimodel="gpt-4o"
 load_dotenv()
 
 def get_vectorstore_from_url(url):
