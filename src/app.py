@@ -1,12 +1,13 @@
+# pip install streamlit langchain lanchain-openai beautifulsoup4 python-dotenv chromadb
+
 import streamlit as st
-from langchain.schema import AIMessage, HumanMessage
-from langchain.document_loaders import WebBaseLoader
+from langchain_core.messages import AIMessage, HumanMessage
+from langchain_community.document_loaders import WebBaseLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.chat_models import ChatOpenAI
+from langchain_community.vectorstores import Chroma
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from dotenv import load_dotenv
-from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
@@ -52,7 +53,7 @@ def get_conversational_rag_chain(retriever_chain):
       ("user", "{input}"),
     ])
     
-    stuff_documents_chain = create_stuff_documents_chain(llm, prompt)
+    stuff_documents_chain = create_stuff_documents_chain(llm,prompt)
     
     return create_retrieval_chain(retriever_chain, stuff_documents_chain)
 
@@ -87,9 +88,6 @@ else:
         ]
     if "vector_store" not in st.session_state:
         st.session_state.vector_store = get_vectorstore_from_url(website_url)    
-    else:
-        # Load the vector store from the session state if it exists
-        st.session_state.vector_store = st.session_state.vector_store
 
     # user input
     user_query = st.chat_input("Type your message here...")
@@ -98,6 +96,8 @@ else:
         st.session_state.chat_history.append(HumanMessage(content=user_query))
         st.session_state.chat_history.append(AIMessage(content=response))
         
+       
+
     # conversation
     for message in st.session_state.chat_history:
         if isinstance(message, AIMessage):
