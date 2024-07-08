@@ -77,14 +77,12 @@ with st.sidebar:
 
 display_chat()
 
-# Adjusting the width of the input bar using columns
-col1, col2, col3 = st.columns([1,2,1])
-with col2:  # Middle column
-    input_container = st.empty()
-    user_input = input_container.text_input("Type your message here...", key="user_input")
-    if user_input:
-        response = get_response(user_input, st.session_state.current_url)
-        st.session_state.chat_histories[st.session_state.current_url].append(HumanMessage(content=user_input))
-        st.session_state.chat_histories[st.session_state.current_url].append(AIMessage(content=response))
-        display_chat()
-        input_container.text_input("Type your message here...", key="user_input", value="")  # Reset the input field
+# Input for new messages
+input_container = st.empty()
+user_input = input_container.text_input("Type your message here...", key="user_input")
+if user_input:
+    response = get_response(user_input, st.session_state.current_url)
+    st.session_state.chat_histories[st.session_state.current_url].append(HumanMessage(content=user_input))
+    st.session_state.chat_histories[st.session_state.current_url].append(AIMessage(content=response))
+    display_chat()
+    input_container.text_input("Type your message here...", key="user_input", value="")  # Reset the input field
