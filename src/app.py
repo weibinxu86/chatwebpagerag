@@ -75,9 +75,16 @@ with st.sidebar:
         if website_url not in st.session_state.chat_histories:
             st.session_state.chat_histories[website_url] = [AIMessage(content="Hello, I am a bot. How can I help you based on the new website?")]
 
-user_query = st.text_input("Type your message here...", key="user_input", on_change=display_chat)
-if user_query:
-    response = get_response(user_query, st.session_state.current_url)
-    st.session_state.chat_histories[st.session_state.current_url].append(HumanMessage(content=user_query))
-    st.session_state.chat_histories[st.session_state.current_url].append(AIMessage(content=response))
-    display_chat()
+display_chat()
+
+# Adjusting the width of the input bar using columns
+col1, col2, col3 = st.columns([1,2,1])
+with col2:  # Middle column
+    input_container = st.empty()
+    user_input = input_container.text_input("Type your message here...", key="user_input")
+    if user_input:
+        response = get_response(user_input, st.session_state.current_url)
+        st.session_state.chat_histories[st.session_state.current_url].append(HumanMessage(content=user_input))
+        st.session_state.chat_histories[st.session_state.current_url].append(AIMessage(content=response))
+        display_chat()
+        input_container.text_input("Type your message here...", key="user_input", value="")  # Reset the input field
